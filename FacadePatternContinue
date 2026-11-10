@@ -1,0 +1,35 @@
+package com.ecommerce;
+
+/**
+ * Subsystem Class 5: FraudCheckService
+ * Responsible for deciding whether a transaction looks legitimate, suspicious or fake.
+ */
+public class FraudCheckService {
+
+    private static final double SUSPICIOUS_AMOUNT_LIMIT = 5000.00;
+
+    /**
+     * Returns true if the customer account itself looks fake
+     * (mocked rule: ID is missing or doesn't match the "user_<digits>" format).
+     */
+    public boolean isFake(String customerId) {
+        System.out.println("[FraudCheckService] Verifying customer identity: " + customerId);
+        return customerId == null || !customerId.matches("user_\\d+");
+    }
+
+    /**
+     * Returns true if the transaction looks suspicious
+     * (mocked rule: unusually large amount).
+     */
+    public boolean isSus(String customerId, double amount) {
+        System.out.println("[FraudCheckService] Analyzing transaction of $" + amount + " for customer: " + customerId);
+        return amount > SUSPICIOUS_AMOUNT_LIMIT;
+    }
+
+    /**
+     * Returns true only if the customer is not fake and the transaction is not suspicious.
+     */
+    public boolean isLegit(String customerId, double amount) {
+        return !isFake(customerId) && !isSus(customerId, amount);
+    }
+}
